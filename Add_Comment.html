@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Add Comment</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="header">
+    <h1 id="dynamic-text">Reminders</h1>
+    <div class="button-container">
+      <a href="Add_Reminder.html" class="button">
+        <i class="fas fa-plus"></i>
+        <span>Add</span>
+      </a>
+      <a href="Edit_Reminder.html" class="button">
+        <i class="fas fa-edit"></i>
+        <span>Edit</span>
+      </a>
+      <a href="Add_Comment.html" class="button">
+        <i class="fas fa-comment"></i>
+        <span>Comment</span>
+      </a>
+      <a href="Delete_Reminder.html" class="button">
+        <i class="fas fa-trash"></i>
+        <span>Delete</span>
+      </a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="content">
+      <h1 class="page-title">Add Comment</h1>
+      <form id="add-comment-form">
+        <label for="reminder-select">Select Reminder:</label>
+        <select id="reminder-select" name="reminder-select" required></select>
+        <br>
+        <label for="comment-text">Comment:</label>
+        <input type="text" id="comment-text" name="comment-text" required>
+        <button type="submit">Add Comment</button>
+      </form>
+    </div>
+  </div>
+  <footer class="footer">
+    <p>Created by <i class="fas fa-crown"></i> Prashant Singh Tomar</p>
+  </footer>
+  <button id="change-bg-btn" class="floating-button">
+    <i class="fas fa-image"></i>
+  </button>
+  <input type="file" id="file-input" class="file-input" accept="image/*">
+  <input type="color" id="text-color-picker" class="color-picker">
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      loadReminders();
+    });
+
+    document.getElementById('add-comment-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const reminderSelect = document.getElementById('reminder-select');
+      const selectedReminderIndex = reminderSelect.value;
+      const commentText = document.getElementById('comment-text').value.trim();
+
+      if (selectedReminderIndex !== '' && commentText) {
+        const reminders = JSON.parse(localStorage.getItem('reminderList')) || [];
+        if (reminders[selectedReminderIndex].comment) {
+          reminders[selectedReminderIndex].comment += ` --${commentText}`;
+        } else {
+          reminders[selectedReminderIndex].comment = commentText;
+        }
+        localStorage.setItem('reminderList', JSON.stringify(reminders));
+        document.getElementById('comment-text').value = '';
+        alert('Comment added!');
+      }
+    });
+
+    function loadReminders() {
+      const reminders = JSON.parse(localStorage.getItem('reminderList')) || [];
+      const reminderSelect = document.getElementById('reminder-select');
+      reminderSelect.innerHTML = '';
+
+      reminders.forEach((reminder, index) => {
+        const option = document.createElement('option');
+        option.value = index;
+        option.textContent = reminder.text;
+        reminderSelect.appendChild(option);
+      });
+    }
+  </script>
+</body>
+</html>

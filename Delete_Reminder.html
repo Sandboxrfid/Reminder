@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Delete Reminder</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="header">
+    <h1 id="dynamic-text">Reminders</h1>
+    <div class="button-container">
+      <a href="Add_Reminder.html" class="button">
+        <i class="fas fa-plus"></i>
+        <span>Add</span>
+      </a>
+      <a href="Edit_Reminder.html" class="button">
+        <i class="fas fa-edit"></i>
+        <span>Edit</span>
+      </a>
+      <a href="Add_Comment.html" class="button">
+        <i class="fas fa-comment"></i>
+        <span>Comment</span>
+      </a>
+      <a href="Delete_Reminder.html" class="button">
+        <i class="fas fa-trash"></i>
+        <span>Delete</span>
+      </a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="content">
+      <h1 class="page-title">Delete Reminder</h1>
+      <form id="delete-reminder-form">
+        <label for="reminder-checkboxes">Select Reminders:</label>
+        <div id="reminder-checkboxes"></div>
+        <button type="submit">Delete</button>
+      </form>
+    </div>
+  </div>
+  <footer class="footer">
+    <p>Created by <i class="fas fa-crown"></i> Prashant Singh Tomar</p>
+  </footer>
+  <button id="change-bg-btn" class="floating-button">
+    <i class="fas fa-image"></i>
+  </button>
+  <input type="file" id="file-input" class="file-input" accept="image/*">
+  <input type="color" id="text-color-picker" class="color-picker">
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      loadReminders();
+    });
+
+    document.getElementById('delete-reminder-form').addEventListener('submit', function(event) {
+      event.preventDefault();
+      const checkboxes = document.querySelectorAll('.reminder-checkbox:checked');
+      const indicesToDelete = Array.from(checkboxes).map(checkbox => parseInt(checkbox.value));
+      if (indicesToDelete.length > 0) {
+        let reminders = JSON.parse(localStorage.getItem('reminderList')) || [];
+        reminders = reminders.filter((_, index) => !indicesToDelete.includes(index));
+        localStorage.setItem('reminderList', JSON.stringify(reminders));
+        loadReminders();
+        alert('Reminders deleted!');
+      }
+    });
+
+    function loadReminders() {
+      const reminders = JSON.parse(localStorage.getItem('reminderList')) || [];
+      const container = document.getElementById('reminder-checkboxes');
+      container.innerHTML = '';
+
+      reminders.forEach((reminder, index) => {
+        const label = document.createElement('label');
+        label.innerHTML = `<input type="checkbox" class="reminder-checkbox" value="${index}"> ${reminder.text}`;
+        container.appendChild(label);
+        container.appendChild(document.createElement('br'));
+      });
+    }
+  </script>
+</body>
+</html>

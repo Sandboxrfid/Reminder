@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>View Reminders</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="header">
+    <h1 id="dynamic-text">Reminders</h1>
+    <div class="button-container">
+      <a href="Add_Reminder.html" class="button">
+        <i class="fas fa-plus"></i>
+        <span>Add Reminders</span>
+      </a>
+      <a href="Edit_Reminder.html" class="button">
+        <i class="fas fa-edit"></i>
+        <span>Edit Reminders</span>
+      </a>
+      <a href="Add_Comment.html" class="button">
+        <i class="fas fa-comment"></i>
+        <span>Add Comments</span>
+      </a>
+      <a href="Delete_Reminder.html" class="button">
+        <i class="fas fa-trash"></i>
+        <span>Delete Reminder</span>
+      </a>
+      <a href="View_Reminders.html" class="button">
+        <i class="fas fa-eye"></i>
+        <span>View Reminders</span>
+      </a>
+    </div>
+  </div>
+  <div class="container">
+    <div class="background"></div>
+    <div class="content">
+      <h1>View Reminders</h1>
+      <div id="reminders-container"></div>
+      <a href="index.html" class="button">
+        <i class="fas fa-home"></i>
+        <span>Home</span>
+      </a>
+    </div>
+  </div>
+  <footer class="footer">
+    <p>Created by <i class="fas fa-crown"></i> Prashant Singh Tomar</p>
+  </footer>
+  <button id="change-bg-btn" class="floating-button">
+    <i class="fas fa-image"></i>
+  </button>
+  <input type="file" id="file-input" class="file-input" accept="image/*">
+  <input type="color" id="text-color-picker" class="color-picker">
+  <script src="script.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      loadReminders();
+    });
+
+    function loadReminders() {
+      const reminders = JSON.parse(localStorage.getItem('reminderList')) || [];
+      const container = document.getElementById('reminders-container');
+      container.innerHTML = '';
+
+      reminders.forEach(reminder => {
+        const reminderDiv = document.createElement('div');
+        reminderDiv.innerHTML = `<b>${reminder.text}</b>`;
+        
+        if (reminder.comment) {
+          const comments = reminder.comment.split('--').map(comment => comment.trim()).filter(Boolean);
+          comments.forEach(comment => {
+            const commentSpan = document.createElement('span');
+            commentSpan.innerHTML = ` --${comment}`;
+            commentSpan.style.fontStyle = 'italic';
+            commentSpan.style.fontWeight = 'normal';
+            reminderDiv.appendChild(commentSpan);
+          });
+        }
+        container.appendChild(reminderDiv);
+      });
+    }
+  </script>
+</body>
+</html>
